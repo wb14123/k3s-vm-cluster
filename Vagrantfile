@@ -24,6 +24,9 @@ Vagrant.configure("2") do |config|
     SHELL
   end
 
+  # requirement for longhorn
+  config.vm.provision "shell", inline: "apt-get install open-iscsi"
+
   config.vm.provider "virtualbox" do |v|
     v.memory = 2048
   end
@@ -35,7 +38,8 @@ Vagrant.configure("2") do |config|
     add_disk v, '/data/vagrant/disks/k3s-server1.vdi'
     v.vm.provision "file", source: "./k3s-config/server1.yaml", destination: "$HOME/k3s-config.yaml"
     v.vm.provision "shell", inline: "mkdir -p /etc/rancher/k3s && mv /home/vagrant/k3s-config.yaml /etc/rancher/k3s/config.yaml"
-    v.vm.provision "file", source: "./ceph", destination: "$HOME/ceph"
+    v.vm.provision "shell", inline: "curl -sfL https://get.k3s.io | sh -"
+    v.vm.provision "file", source: "./longhorn.yaml", destination: "$HOME/longhorn.yaml"
   end
 
   config.vm.define "k3s-server2" do |v|
@@ -45,6 +49,7 @@ Vagrant.configure("2") do |config|
     add_disk v, '/data/vagrant/disks/k3s-server2.vdi'
     v.vm.provision "file", source: "./k3s-config/server2.yaml", destination: "$HOME/k3s-config.yaml"
     v.vm.provision "shell", inline: "mkdir -p /etc/rancher/k3s && mv /home/vagrant/k3s-config.yaml /etc/rancher/k3s/config.yaml"
+    v.vm.provision "shell", inline: "curl -sfL https://get.k3s.io | sh -"
   end
 
   config.vm.define "k3s-server3" do |v|
@@ -54,6 +59,7 @@ Vagrant.configure("2") do |config|
     add_disk v, '/data/vagrant/disks/k3s-server3.vdi'
     v.vm.provision "file", source: "./k3s-config/server3.yaml", destination: "$HOME/k3s-config.yaml"
     v.vm.provision "shell", inline: "mkdir -p /etc/rancher/k3s && mv /home/vagrant/k3s-config.yaml /etc/rancher/k3s/config.yaml"
+    v.vm.provision "shell", inline: "curl -sfL https://get.k3s.io | sh -"
   end
 
   config.vm.define "k3s-agent1" do |v|
@@ -63,6 +69,7 @@ Vagrant.configure("2") do |config|
     add_disk v, '/data/vagrant/disks/k3s-agent1.vdi'
     v.vm.provision "file", source: "./k3s-config/agent1.yaml", destination: "$HOME/k3s-config.yaml"
     v.vm.provision "shell", inline: "mkdir -p /etc/rancher/k3s && mv /home/vagrant/k3s-config.yaml /etc/rancher/k3s/config.yaml"
+    v.vm.provision "shell", inline: "curl -sfL https://get.k3s.io | sh -s agent -"
   end
 
 
