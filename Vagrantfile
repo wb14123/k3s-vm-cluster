@@ -25,35 +25,46 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.provider "virtualbox" do |v|
-    v.memory = 1024
+    v.memory = 2048
   end
 
-  config.vm.define "k3s-server1" do |master|
-    master.vm.box = distro
-    master.vm.hostname = "k3s-server1"
-    master.vm.network "private_network", ip: "192.168.56.2"
-    add_disk master, '/data/vagrant/disks/k3s-server1.vdi'
+  config.vm.define "k3s-server1" do |v|
+    v.vm.box = distro
+    v.vm.hostname = "k3s-server1"
+    v.vm.network "private_network", ip: "192.168.56.2"
+    add_disk v, '/data/vagrant/disks/k3s-server1.vdi'
+    v.vm.provision "file", source: "./k3s-config/server1.yaml", destination: "$HOME/k3s-config.yaml"
+    v.vm.provision "shell", inline: "mkdir -p /etc/rancher/k3s && mv /home/vagrant/k3s-config.yaml /etc/rancher/k3s/config.yaml"
+    v.vm.provision "file", source: "./ceph", destination: "$HOME/ceph"
   end
 
-  config.vm.define "k3s-server2" do |slave|
-    slave.vm.box = distro
-    slave.vm.hostname = "k3s-server2"
-    slave.vm.network "private_network", ip: "192.168.56.3"
-    add_disk slave, '/data/vagrant/disks/k3s-server2.vdi'
+  config.vm.define "k3s-server2" do |v|
+    v.vm.box = distro
+    v.vm.hostname = "k3s-server2"
+    v.vm.network "private_network", ip: "192.168.56.3"
+    add_disk v, '/data/vagrant/disks/k3s-server2.vdi'
+    v.vm.provision "file", source: "./k3s-config/server2.yaml", destination: "$HOME/k3s-config.yaml"
+    v.vm.provision "shell", inline: "mkdir -p /etc/rancher/k3s && mv /home/vagrant/k3s-config.yaml /etc/rancher/k3s/config.yaml"
   end
 
-  config.vm.define "k3s-server3" do |slave|
-    slave.vm.box = distro
-    slave.vm.hostname = "k3s-server3"
-    slave.vm.network "private_network", ip: "192.168.56.4"
-    add_disk slave, '/data/vagrant/disks/k3s-server3.vdi'
+  config.vm.define "k3s-server3" do |v|
+    v.vm.box = distro
+    v.vm.hostname = "k3s-server3"
+    v.vm.network "private_network", ip: "192.168.56.4"
+    add_disk v, '/data/vagrant/disks/k3s-server3.vdi'
+    v.vm.provision "file", source: "./k3s-config/server3.yaml", destination: "$HOME/k3s-config.yaml"
+    v.vm.provision "shell", inline: "mkdir -p /etc/rancher/k3s && mv /home/vagrant/k3s-config.yaml /etc/rancher/k3s/config.yaml"
   end
 
-  config.vm.define "k3s-agent1" do |slave|
-    slave.vm.box = distro
-    slave.vm.hostname = "k3s-agent1"
-    slave.vm.network "private_network", ip: "192.168.56.5"
-    add_disk slave, '/data/vagrant/disks/k3s-agent1.vdi'
+  config.vm.define "k3s-agent1" do |v|
+    v.vm.box = distro
+    v.vm.hostname = "k3s-agent1"
+    v.vm.network "private_network", ip: "192.168.56.5"
+    add_disk v, '/data/vagrant/disks/k3s-agent1.vdi'
+    v.vm.provision "file", source: "./k3s-config/agent1.yaml", destination: "$HOME/k3s-config.yaml"
+    v.vm.provision "shell", inline: "mkdir -p /etc/rancher/k3s && mv /home/vagrant/k3s-config.yaml /etc/rancher/k3s/config.yaml"
   end
+
+
 
 end
