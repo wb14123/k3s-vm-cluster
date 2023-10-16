@@ -43,6 +43,7 @@ Vagrant.configure("2") do |config|
     v.vm.provision "shell", inline: "mkdir -p /etc/rancher/k3s && mv /home/vagrant/k3s-config.yaml /etc/rancher/k3s/config.yaml"
     v.vm.provision "shell", inline: "curl -sfL https://get.k3s.io | sh -"
     v.vm.provision "file", source: "./longhorn.yaml", destination: "$HOME/longhorn.yaml"
+    v.vm.provision "file", source: "./ceph", destination: "$HOME/ceph"
   end
 
   config.vm.define "k3s-server2" do |v|
