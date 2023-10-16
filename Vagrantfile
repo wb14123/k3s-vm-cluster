@@ -24,6 +24,9 @@ Vagrant.configure("2") do |config|
     SHELL
   end
 
+  # disable firewall
+  config.vm.provision "shell", inline: "ufw disable"
+
   # requirement for longhorn
   config.vm.provision "shell", inline: "apt-get install open-iscsi"
 
