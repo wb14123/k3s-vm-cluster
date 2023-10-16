@@ -5,3 +5,4 @@ disable:
 node-ip: "192.168.56.2"
 token: unsecureservertoken
 agent-token: unsecureagenttoken
+flannel-iface: eth1
