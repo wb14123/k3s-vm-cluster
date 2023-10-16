@@ -12,6 +12,7 @@ spec:
     port: 8443
     protocol: TCP
     targetPort: 8443
+    nodePort: 32000
   selector:
     app: rook-ceph-mgr
     rook_cluster: rook-ceph
