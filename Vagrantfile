@@ -44,6 +44,8 @@ Vagrant.configure("2") do |config|
     v.vm.provision "shell", inline: "curl -sfL https://get.k3s.io | sh -"
     v.vm.provision "file", source: "./longhorn.yaml", destination: "$HOME/longhorn.yaml"
     v.vm.provision "file", source: "./ceph", destination: "$HOME/ceph"
+    v.vm.provision "shell", inline: "mkdir -p /home/vagrant/.kube && cp /etc/rancher/k3s/k3s.yaml /home/vagrant/.kube/config && chown -R vagrant /home/vagrant/.kube"
+    v.vm.provision "shell", inline: "cd /home/vagrant && wget https://github.com/derailed/k9s/releases/download/v0.27.4/k9s_Linux_amd64.tar.gz && tar -xf k9s_Linux_amd64.tar.gz"
   end
 
   config.vm.define "k3s-server2" do |v|
