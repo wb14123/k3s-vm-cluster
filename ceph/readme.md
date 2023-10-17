@@ -12,6 +12,18 @@ kubectl create -f crds.yaml -f common.yaml -f operator.yaml
 kubectl create -f cluster.yaml
 ```
 
+Create dashboard service running on node port 32000 (more details in [doc](https://rook.github.io/docs/rook/v1.11/Storage-Configuration/Monitoring/ceph-dashboard/#enable-the-ceph-dashboard)):
+
+```
+kubectl create -f dashboard-service.yaml
+```
+
+Username is `admin`, get password by using command:
+
+```
+kubectl -n rook-ceph get secret rook-ceph-dashboard-password -o jsonpath="{['data']['password']}" | base64 --decode && echo
+```
+
 Create shared file system for pods (follow [guide](https://rook.io/docs/rook/v1.11/Storage-Configuration/Shared-Filesystem-CephFS/filesystem-storage/#create-the-filesystem)):
 
 ```
